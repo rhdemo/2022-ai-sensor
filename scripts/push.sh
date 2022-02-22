@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-printf "\n\n######## admin-ui push ########\n"
+printf "\n\n######## ai-sensor push ########\n"
 
 IMAGE_REPOSITORY=${IMAGE_REPOSITORY:-quay.io/redhatdemo/2022-ai-sensor:latest}
 
