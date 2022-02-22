@@ -1,0 +1,127 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: ai-sensor
+
+parameters:
+  - name: SECRET_NAME
+    description: The name of the secret.
+    value: ai-sensor
+    required: true
+  - name: S3_ACCESS_KEY_ID
+    value: ""
+  - name: S3_SECRET_ACCESS_KEY
+    value: ""
+  - name: APPLICATION_NAME
+    description: The name of the application.
+    value: ai-sensor
+    from: "[a-zA-Z0-9]{10}"
+    required: true
+  - name: REPLICAS
+    value: "1"
+    required: true
+  - name: IMAGE_REPOSITORY
+    description: Name of the Image containing the model
+    value: quay.io/redhatdemo/2022-ai-sensor:latest
+    required: true
+  - name: CONTAINER_REQUEST_CPU
+    value: 500m
+  - name: CONTAINER_REQUEST_MEMORY
+    value: 1Gi
+  - name: CONTAINER_LIMIT_CPU
+    value: 2000m
+  - name: CONTAINER_LIMIT_MEMORY
+    value: 4Gi
+
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ${SECRET_NAME}
+    stringData:
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+    type: Opaque
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+        app.kubernetes.io/component: ${APPLICATION_NAME}
+        app.kubernetes.io/instance: ${APPLICATION_NAME}
+        app.kubernetes.io/name: ${APPLICATION_NAME}
+        app.kubernetes.io/part-of: ${APPLICATION_NAME}
+    spec:
+      replicas: ${{REPLICAS}}
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app: ${APPLICATION_NAME}
+      strategy:
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            app: ${APPLICATION_NAME}
+        spec:
+          containers:
+            - name: ${APPLICATION_NAME}
+              envFrom:
+                - secretRef:
+                    name: ${SECRET_NAME}
+              image: ${IMAGE_REPOSITORY}
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                requests:
+                  cpu: ${CONTAINER_REQUEST_CPU}
+                  memory: ${CONTAINER_REQUEST_MEMORY}
+                limits:
+                  cpu: ${CONTAINER_LIMIT_CPU}
+                  memory: ${CONTAINER_LIMIT_MEMORY}
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+        app.kubernetes.io/component: ${APPLICATION_NAME}
+        app.kubernetes.io/instance: ${APPLICATION_NAME}
+        app.kubernetes.io/name: ${APPLICATION_NAME}
+        app.kubernetes.io/part-of: ${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: ${APPLICATION_NAME}
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+        app.kubernetes.io/component: ${APPLICATION_NAME}
+        app.kubernetes.io/instance: ${APPLICATION_NAME}
+        app.kubernetes.io/name: ${APPLICATION_NAME}
+        app.kubernetes.io/part-of: ${APPLICATION_NAME}
+    spec:
+      port:
+        targetPort: 8080-tcp
+      to:
+        kind: Service
+        name: ai-sensor
+        weight: 100
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+
