@@ -9,9 +9,9 @@
 # predictor = saved_model.signatures['default']
 
 
-# Write a predict function 
+# Write a predict function
 def predict(args_dict):
 #     arg = args_dict.get('arg1')
 #     predictor(arg)
-    return {'prediction': 'not implemented'}
+    return args_dict
 
