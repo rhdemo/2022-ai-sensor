@@ -1,6 +1,7 @@
 import json
 from flask import Flask, jsonify, request
 from prediction import predict
+from utilities import save_json
 
 application = Flask(__name__)
 
@@ -14,5 +15,6 @@ def status():
 @application.route('/predictions', methods=['POST'])
 def create_prediction():
     data = request.data or '{}'
+    save_json(data)
     body = json.loads(data)
     return jsonify(predict(body))

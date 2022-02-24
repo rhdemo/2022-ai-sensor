@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 IMAGE_REPOSITORY=${IMAGE_REPOSITORY:-quay.io/redhatdemo/2022-ai-sensor:latest}
 SOURCE_REPOSITORY_URL=${SOURCE_REPOSITORY_URL:-https://github.com/rhdemo/2022-ai-sensor.git}
 SOURCE_REPOSITORY_REF=${SOURCE_REPOSITORY_REF:-master}
-SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR:-.}
+SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR:-service}
 
 echo "Building ${IMAGE_REPOSITORY} from ${SOURCE_REPOSITORY_URL} on ${SOURCE_REPOSITORY_REF}"
 

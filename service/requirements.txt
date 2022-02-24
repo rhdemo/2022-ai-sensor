@@ -1,0 +1,6 @@
+# App dependencies
+Flask
+gunicorn
+boto3
+
+# Data Science dependencies

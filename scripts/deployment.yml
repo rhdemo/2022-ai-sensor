@@ -1,6 +1,6 @@
 ---
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 metadata:
   name: ai-sensor
 
@@ -9,10 +9,12 @@ parameters:
     description: The name of the secret.
     value: ai-sensor
     required: true
-  - name: S3_ACCESS_KEY_ID
+  - name: AWS_ACCESS_KEY_ID
     value: ""
-  - name: S3_SECRET_ACCESS_KEY
+  - name: AWS_SECRET_ACCESS_KEY
     value: ""
+  - name: AWS_S3_BUCKET
+    value: "summit-demo"
   - name: APPLICATION_NAME
     description: The name of the application.
     value: ai-sensor
@@ -40,8 +42,9 @@ objects:
     metadata:
       name: ${SECRET_NAME}
     stringData:
-      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
-      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
     type: Opaque
 
   - apiVersion: apps/v1

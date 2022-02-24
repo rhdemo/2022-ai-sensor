@@ -37,10 +37,18 @@ push:
 
 ##################################
 
-# PUSH - push images to repository
+# DEPLOY - deploy application to OpenShift
 
 .PHONY: deploy
 deploy:
 	./scripts/deploy.sh
+
+##################################
+
+# DEPLOY - deploy application to OpenShift
+
+.PHONY: undeploy
+undeploy:
+	./scripts/undeploy.sh
 
 ##################################
