@@ -19,7 +19,7 @@ if key_id and secret_key and bucket:
         's3',
         config=botocore.client.Config(signature_version='s3v4')
     )
-    print(f'S3 information found.  Will save request body to bucket {bucket}')
+    print(f'S3 information found.  Will save request body to bucket {bucket}/{prefix}')
 else:
     print(f'S3 information not found.  Will NOT save request body')
 

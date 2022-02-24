@@ -128,3 +128,26 @@ objects:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
 
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: allow-http
+    spec:
+      podSelector: { }
+      ingress:
+        - ports:
+            - protocol: TCP
+              port: 8080
+          from:
+            - podSelector: { }
+              namespaceSelector: { }
+      egress:
+        - ports:
+            - protocol: TCP
+              port: 8080
+          to:
+            - podSelector: { }
+              namespaceSelector: { }
+      policyTypes:
+        - Ingress
+        - Egress
