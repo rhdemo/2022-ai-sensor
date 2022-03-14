@@ -43,11 +43,13 @@ def read_data(bucket_name='summit-demo', prefix='ai-sensor-v3/device', n_data_ma
     
     return data_list
 
-def create_df(data_list, out_loc):
+def create_df(data_list, out_loc, save_data=False):
     '''create dataframes from raw data
     '''
 
     data = [json.loads(d[0].decode('utf-8')) for d in data_list] #decode dictionaries
+    if save_data:
+        json.dump(data, open(f'{out_loc}/data.json', 'w'))
 
     uniq_dids = np.unique([d['deviceuid'] for d in data]) #unique device uids
     uniq_features = np.unique(np.concatenate([list(d['data']['features'].keys()) for d in data])) #unique feature names

@@ -14,7 +14,7 @@ if not os.path.exists(config.fields_loc):
                           prefix=config.prefix,
                           n_data_max=config.n_data_max)
 
-    df, df_flat, fields = create_df(data_list, config.df_out_loc)
+    df, df_flat, fields = create_df(data_list, config.df_out_loc, config.save_data)
     utils.write_json(fields, config.fields_loc)
 else:
     #if data exists

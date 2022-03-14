@@ -5,6 +5,7 @@ import utils
 bucket_name = 'summit-demo'
 prefix = 'ai-sensor-v3/device'
 n_data_max = None
+save_data = False
 
 #CSV files
 df_out_loc = './data'
