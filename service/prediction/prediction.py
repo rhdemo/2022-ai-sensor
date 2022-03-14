@@ -19,9 +19,10 @@ fields = utils.read_json(config.fields_loc)
 def predict(data, cals, fields):
     '''Input is data packet
     '''
-    data = args_dict['data']
-    cals = args_dict['cals']
-    fields = args_dict['fields']
+    
+    #data = args_dict['data']
+    #cals = args_dict['cals']
+    #fields = args_dict['fields']
     
     res = {}
     
