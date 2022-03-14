@@ -15,3 +15,33 @@ def predict(args_dict):
 #     predictor(arg)
     return args_dict
 
+def predict(data, cals, fields):
+    '''Input is data packet
+    '''
+    data = args_dict['data']
+    cals = args_dict['cals']
+    fields = args_dict['fields']
+    
+    res = {}
+    
+    for f in data['features']: #'acc', 'led_1' etc.
+        res = {}
+        if f=='accelerometer':
+            val = 0
+            for k in fields[f]:
+                val += data['features'][f][k]**2
+            val = np.sqrt(val)
+
+            k = 'mag'
+            r = (val > cals[data['deviceuid']][f'{f}_{k}']['low']) and (val < cals[data['deviceuid']][f'{f}_{k}']['high'])
+            
+        else:
+            for k in fields[f]:
+                
+                val = data['features'][f][k]
+                
+                r = (val > cals[data['deviceuid']][f'{f}_{k}']['low']) and (val < cals[data['deviceuid']][f'{f}_{k}']['high'])
+                
+                res[f'{f}_{k}'] = r
+        
+    return res
