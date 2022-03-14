@@ -10,10 +10,10 @@
 
 
 # Write a predict function
-def predict(args_dict):
-#     arg = args_dict.get('arg1')
-#     predictor(arg)
-    return args_dict
+import config
+import utils
+
+cals = utils.read_json(config.cals_loc)
 
 def predict(data, cals, fields):
     '''Input is data packet
